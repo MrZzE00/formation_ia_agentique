@@ -30,7 +30,8 @@ strategic_crew = Crew(
     agents=[data_analyst, strategy_writer],
     tasks=[task_analysis, task_writing],
     process=Process.sequential,
-    verbose=True # Affiche le détail complet de l'exécution du crew
+    memory=True,  # Active la mémoire conversationnelle
+    verbose=True  # Affiche le détail complet de l'exécution du crew
 )
 
 print("✅ Tâches définies.")
