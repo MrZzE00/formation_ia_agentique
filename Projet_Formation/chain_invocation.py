@@ -10,7 +10,7 @@ from prompt_constitution import analyst_prompt, writer_prompt
 # Chaîne pour l'Analyste
 analyst_chain = analyst_prompt | analyst_llm
 
-# Chaîne pour le Rédacteur (anciennement 'prompt', maintenant 'writer_prompt')
+# Chaîne pour le Rédacteur
 writer_chain = writer_prompt | writer_llm
 
 print("🔗 Chaîne de l'Analyste créée (Prompt structuré + LLM).")
