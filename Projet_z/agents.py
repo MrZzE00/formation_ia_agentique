@@ -5,8 +5,16 @@ import yaml
 from pathlib import Path
 from crewai import Agent
 from langchain_google_genai import ChatGoogleGenerativeAI
+from crewai.llm import LLM
 from tools import search_financial_trends_robust
 import os
+
+# Configuration de la clé API Gemini pour LiteLLM
+# LiteLLM peut chercher GEMINI_API_KEY ou GOOGLE_API_KEY selon la version
+if os.getenv("GOOGLE_API_KEY"):
+    os.environ["GEMINI_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+    # Assurons-nous que LiteLLM trouve la clé dans tous les cas
+    os.environ["GOOGLE_GENERATIVE_AI_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
 
 def load_agent_config(config_path: str) -> dict:
@@ -23,9 +31,9 @@ class AnalysteFinancierAgent:
         config_path = Path(__file__).parent / "prompt" / "AnalysteFinancier_v01.yaml"
         self.config = load_agent_config(str(config_path))
         
-        # Initialiser le modèle LLM
-        self.llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",  # Format correct pour langchain-google-genai
+        # Initialiser le modèle LLM avec CrewAI LLM pour une meilleure compatibilité
+        self.llm = LLM(
+            model="gemini/gemini-1.5-flash",  # Format LiteLLM explicite
             temperature=self.config['core_model']['parameters']['temperature'],
             max_tokens=self.config['core_model']['parameters']['max_tokens'],
             top_p=self.config['core_model']['parameters']['top_p'],
@@ -71,9 +79,9 @@ class RedacteurStrategiqueAgent:
         config_path = Path(__file__).parent / "prompt" / "RedacteurStrategique_v01.yaml"
         self.config = load_agent_config(str(config_path))
         
-        # Initialiser le modèle LLM
-        self.llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",  # Format correct pour langchain-google-genai
+        # Initialiser le modèle LLM avec CrewAI LLM pour une meilleure compatibilité
+        self.llm = LLM(
+            model="gemini/gemini-1.5-flash",  # Format LiteLLM explicite
             temperature=self.config['core_model']['parameters']['temperature'],
             max_tokens=self.config['core_model']['parameters']['max_tokens'],
             top_p=self.config['core_model']['parameters']['top_p'],
