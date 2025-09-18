@@ -30,7 +30,7 @@ strategic_crew = Crew(
     agents=[data_analyst, strategy_writer],
     tasks=[task_analysis, task_writing],
     process=Process.sequential,
-    memory=True,  # Active la mémoire conversationnelle
+    memory=False,  # Mémoire désactivée pour simplifier la formation
     verbose=True  # Affiche le détail complet de l'exécution du crew
 )
 

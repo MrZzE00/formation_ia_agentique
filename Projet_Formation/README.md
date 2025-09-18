@@ -2,7 +2,7 @@
 
 ## 📋 Description
 
-Ce projet implémente un système multi-agents utilisant **CrewAI** et **LangChain** pour l'analyse financière automatisée. Le système utilise deux agents spécialisés qui collaborent pour analyser les tendances du marché et produire des rapports stratégiques.
+Ce projet implémente un système multi-agents utilisant **CrewAI** et **LangChain** avec **Google Gemini 1.5 Flash** pour l'analyse financière automatisée. Le système utilise deux agents spécialisés qui collaborent pour analyser les tendances du marché et produire des rapports stratégiques.
 
 ## 🏗️ Architecture
 
@@ -37,15 +37,15 @@ Ce projet implémente un système multi-agents utilisant **CrewAI** et **LangCha
 
 ```
 Projet_Formation/
-├── 01_model_configuration.py    # Configuration des LLMs (GPT-4)
-├── 02_prompt_constitution.py    # System prompts structurés pour les agents
-├── 03_chain_invocation.py       # Test des chaînes LangChain
-├── 04_tools_creation.py         # Outil de recherche financière
-├── 05_agents_definition.py      # Définition des agents CrewAI
-├── 06_tasks_and_crew.py         # Tâches et orchestration du crew
-├── main.py                       # Point d'entrée principal
-├── tests/
-│   └── test_agents.py          # Tests unitaires
+├── model_configuration.py       # Configuration des LLMs (Gemini 1.5 Flash)
+├── prompt_constitution.py       # System prompts structurés pour les agents
+├── chain_invocation.py          # Test des chaînes LangChain
+├── tools_creation.py            # Outil de recherche financière
+├── agents_definition.py         # Définition des agents CrewAI
+├── tasks_and_crew.py           # Tâches et orchestration du crew
+├── main.py                      # Point d'entrée principal
+├── .env                         # Variables d'environnement
+├── .env.example                 # Exemple de configuration
 └── README.md                    # Ce fichier
 ```
 
@@ -56,7 +56,7 @@ Projet_Formation/
 ```bash
 pip install crewai
 pip install langchain
-pip install langchain-openai
+pip install langchain-google-genai
 pip install python-dotenv
 ```
 
@@ -64,10 +64,17 @@ pip install python-dotenv
 
 1. Créer un fichier `.env` à la racine du projet :
 ```env
-OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=your_google_api_key_here
+SERPER_API_KEY=your_serper_api_key_here
+CHROMA_OPENAI_API_KEY=not_needed_with_gemini
 ```
 
-2. S'assurer que Python 3.8+ est installé
+2. Obtenir une clé API Google Gemini :
+   - Aller sur [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Créer une nouvelle clé API
+   - Copier la clé dans votre fichier `.env`
+
+3. S'assurer que Python 3.8+ est installé
 
 ## 🚀 Installation
 
@@ -77,10 +84,11 @@ git clone [votre-repo]
 cd Projet_Formation
 
 # Installer les dépendances
-pip install -r requirements.txt
+pip install crewai langchain langchain-google-genai python-dotenv
 
-# Configurer la clé API
-echo "OPENAI_API_KEY=sk-votre-clé" > .env
+# Configurer les clés API
+cp .env.example .env
+# Éditer .env avec vos vraies clés API
 ```
 
 ## 💻 Utilisation
@@ -100,6 +108,9 @@ python3 chain_invocation.py
 
 # Tester l'outil de recherche
 python3 -c "from tools_creation import search_financial_trends_robust; print(search_financial_trends_robust._run('NVDA'))"
+
+# Tester la configuration Gemini
+python3 -c "from model_configuration import analyst_llm; print('✅ Gemini configuré')"
 ```
 
 ### Exécution des Tests
@@ -163,20 +174,32 @@ description="""Analyse les tendances financières actuelles pour le titre 'APPLE
 
 ### Ajuster les Paramètres LLM
 
-Dans `01_model_configuration.py` :
+Dans `model_configuration.py` :
 ```python
-analyst_llm = ChatOpenAI(
-    model="gpt-4o",
+# Pour LangChain
+analyst_llm = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash",
     temperature=0.1,  # Ajuster pour plus/moins de créativité
-    max_tokens=2048
+    max_tokens=2048,
+    top_p=0.8,
+    top_k=40
+)
+
+# Pour CrewAI
+analyst_crewai_llm = LLM(
+    model="gemini/gemini-1.5-flash",
+    temperature=0.1,
+    max_tokens=2048,
+    top_p=0.8,
+    top_k=40
 )
 ```
 
 ### Ajouter de Nouveaux Outils
 
-1. Créer l'outil dans `04_tools_creation.py`
-2. L'ajouter à l'agent dans `05_agents_definition.py`
-3. Mettre à jour le workflow dans `02_prompt_constitution.py`
+1. Créer l'outil dans `tools_creation.py`
+2. L'ajouter à l'agent dans `agents_definition.py`
+3. Mettre à jour le workflow dans `prompt_constitution.py`
 
 ## 🐛 Résolution de Problèmes
 
@@ -193,14 +216,20 @@ export PYTHONPATH="${PYTHONPATH}:${PWD}"
 
 Vérifier que le fichier `.env` existe et contient :
 ```env
-OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=your_google_api_key_here
+SERPER_API_KEY=your_serper_api_key_here
+CHROMA_OPENAI_API_KEY=not_needed_with_gemini
 ```
+
+Si vous obtenez une erreur d'authentification, vérifiez :
+1. Que votre clé Google API est valide
+2. Que l'API Gemini est activée dans votre projet Google Cloud
 
 ### Échec de l'Outil
 
 L'outil simule des échecs intentionnellement. Si vous voulez désactiver :
 ```python
-# Dans 04_tools_creation.py, commenter les lignes 18-19
+# Dans tools_creation.py, commenter les lignes de simulation d'erreur
 # if random.randint(1, 3) == 1:
 #     raise ConnectionError("...")
 ```
@@ -209,7 +238,9 @@ L'outil simule des échecs intentionnellement. Si vous voulez désactiver :
 
 - [Documentation CrewAI](https://docs.crewai.com)
 - [Documentation LangChain](https://docs.langchain.com)
-- [OpenAI API](https://platform.openai.com/docs)
+- [Google AI Studio](https://makersuite.google.com/app/apikey)
+- [Documentation Gemini API](https://ai.google.dev/docs)
+- [LangChain Google GenAI](https://python.langchain.com/docs/integrations/llms/google_ai)
 
 ## 📄 Licence
 

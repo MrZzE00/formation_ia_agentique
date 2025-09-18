@@ -1,10 +1,10 @@
 # agents_definition.py
 from crewai import Agent
 from tools_creation import search_financial_trends_robust
-from model_configuration import analyst_llm, writer_llm
 from prompt_constitution import analyst_system_prompt_template, writer_system_prompt_template
+from model_configuration import analyst_crewai_llm, writer_crewai_llm
 
-print("--- Définition des Agents avec System Prompts ---")
+print("--- Définition des Agents CrewAI avec Gemini 1.5 Flash ---")
 
 # Agent 1 : L'Analyste de Données (avec son outil et system prompt)
 data_analyst = Agent(
@@ -15,10 +15,12 @@ data_analyst = Agent(
     pour déceler les signaux importants dans un flot d'informations. Votre analyse est
     toujours précise, factuelle et directement exploitable.""",
     tools=[search_financial_trends_robust], # L'agent a accès à cet outil
-    llm=analyst_llm,
+    llm=analyst_crewai_llm,
     system_template=analyst_system_prompt_template, # Ajout du system prompt structuré
     verbose=True, # Affiche la chaîne de pensée de l'agent (ReAct)
-    allow_delegation=False
+    allow_delegation=False,
+    max_iter=3,  # Limite les itérations pour éviter les boucles
+    memory=False  # Mémoire désactivée pour simplifier la formation
 )
 
 # Agent 2 : Le Rédacteur Stratégique (sans outil mais avec system prompt)
@@ -29,11 +31,13 @@ strategy_writer = Agent(
     backstory="""Vous êtes un ancien journaliste économique réputé pour votre capacité à
     transformer des données complexes en récits stratégiques. Votre style est direct,
     informatif et parfaitement adapté à un public de décideurs.""",
-    llm=writer_llm,
+    llm=writer_crewai_llm,
     system_template=writer_system_prompt_template, # Ajout du system prompt structuré
     verbose=True,
-    allow_delegation=False
+    allow_delegation=False,
+    max_iter=2,  # Moins d'itérations pour la rédaction
+    memory=False  # Mémoire désactivée pour simplifier la formation
 )
 
-print("✅ Agent 'Analyste de Données' défini avec system prompt structuré.")
-print("✅ Agent 'Rédacteur Stratégique' défini avec system prompt structuré.")
+print("✅ Agent 'Analyste de Données' défini avec Gemini 1.5 Flash.")
+print("✅ Agent 'Rédacteur Stratégique' défini avec Gemini 1.5 Flash.")
