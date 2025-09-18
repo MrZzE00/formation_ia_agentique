@@ -6,9 +6,9 @@ print("--- Définition des Tâches et du Crew ---")
 
 # Tâche 1 : Analyse (assignée à l'analyste)
 task_analysis = Task(
-    description="""Analyse les tendances financières actuelles pour le titre 'NVIDIA' (ticker: NVDA).
+    description="""Analyse les tendances financières actuelles pour le titre spécifié (ticker: {ticker}).
     Utilise ton outil pour obtenir les données. Si l'outil échoue, signale-le clairement.""",
-    expected_output="""Un résumé de 3 points clés sur les tendances financières de NVIDIA.
+    expected_output="""Un résumé de 3 points clés sur les tendances financières du titre analysé.
     Si les données n'ont pas pu être récupérées, le rapport doit l'indiquer explicitement.""",
     agent=data_analyst
 )

@@ -96,8 +96,14 @@ cp .env.example .env
 ### Exécution Principale
 
 ```bash
-# Lancer le système multi-agents complet
+# Analyser NVIDIA (par défaut)
 python3 main.py
+
+# Analyser un ticker spécifique en argument
+python3 main.py AAPL
+python3 main.py MSFT
+python3 main.py TSLA
+python3 main.py GOOGL
 ```
 
 ### Tests Individuels
@@ -165,12 +171,44 @@ Les indicateurs techniques et fondamentaux convergent vers une perspective posit
 
 ## 🔄 Personnalisation
 
-### Modifier les Tickers Analysés
+### ⚙️ Fonctionnement Technique
 
-Dans `06_tasks_and_crew.py`, ligne 9 :
-```python
-description="""Analyse les tendances financières actuelles pour le titre 'APPLE' (ticker: AAPL)."""
+L'application utilise un système de template dynamique :
+- Le ticker est passé via `inputs={"ticker": ticker}` au crew
+- La description de la tâche utilise `{ticker}` comme placeholder
+- CrewAI remplace automatiquement `{ticker}` par la valeur fournie
+
+### Analyse de Ticker - Guide Complet
+
+```bash
+# ✅ MÉTHODE RECOMMANDÉE : Argument en ligne de commande
+python3 main.py TICKER_CHOISI
+
+# Exemples pratiques :
+python3 main.py NVDA    # NVIDIA
+python3 main.py AAPL    # Apple
+python3 main.py MSFT    # Microsoft  
+python3 main.py TSLA    # Tesla
+python3 main.py GOOGL   # Google/Alphabet
+python3 main.py AMZN    # Amazon
+python3 main.py META    # Meta/Facebook
+python3 main.py NFLX    # Netflix
+
+# Si aucun argument fourni, utilise NVDA par défaut
+python3 main.py         # Équivalent à python3 main.py NVDA
 ```
+
+### Tickers Populaires pour Formation
+
+| Ticker | Entreprise | Secteur |
+|--------|------------|---------|
+| `NVDA` | NVIDIA | Tech/IA |
+| `AAPL` | Apple | Tech/Consumer |
+| `MSFT` | Microsoft | Tech/Cloud |
+| `TSLA` | Tesla | Auto/Électrique |
+| `GOOGL` | Google | Tech/Recherche |
+| `AMZN` | Amazon | E-commerce/Cloud |
+| `META` | Meta | Social Media |
 
 ### Ajuster les Paramètres LLM
 
