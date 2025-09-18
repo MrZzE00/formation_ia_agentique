@@ -4,7 +4,7 @@ Outils personnalisés pour l'orchestration CrewAI
 import time
 import random
 from typing import Dict, Any, Optional
-from crewai_tools import BaseTool
+# from crewai_tools import BaseTool  # Temporairement désactivé
 from pydantic import BaseModel, Field
 import yfinance as yf
 from datetime import datetime, timedelta
@@ -15,12 +15,27 @@ class FinancialSearchInput(BaseModel):
     ticker_symbol: str = Field(description="Le symbole boursier à rechercher, ex: 'GOOGL', 'AAPL'")
 
 
-class SearchFinancialTrendsRobust(BaseTool):
+# Fonction simple compatible avec CrewAI
+def search_financial_trends_robust(ticker_symbol: str) -> str:
+    """
+    Recherche et retourne les 3 principales tendances financières pour un ticker.
+    
+    Args:
+        ticker_symbol: Le symbole boursier à rechercher (ex: 'AAPL', 'GOOGL')
+        
+    Returns:
+        str: Analyse des tendances financières identifiées
+    """
+    tool_instance = SearchFinancialTrendsRobust()
+    return tool_instance._run(ticker_symbol)
+
+
+class SearchFinancialTrendsRobust:
     """Outil robuste pour rechercher les tendances financières d'un ticker"""
     
     name: str = "search_financial_trends_robust"
     description: str = "Recherche et retourne les 3 principales tendances financières (actualités, métriques, sentiment de marché) pour un symbole boursier (ticker) donné."
-    args_schema: type[BaseModel] = FinancialSearchInput
+    # args_schema: type[BaseModel] = FinancialSearchInput  # Simplification sans crewai-tools
     
     def _run(self, ticker_symbol: str) -> str:
         """

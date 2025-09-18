@@ -57,13 +57,23 @@ class FinancialAnalysisWorkflow:
 </analyse_financiere>
 """
         
+        # Appeler l'outil manuellement et intégrer le résultat
+        from tools import search_financial_trends_robust
+        try:
+            tool_result = search_financial_trends_robust(ticker)
+        except Exception as e:
+            tool_result = f"ERREUR: Impossible de récupérer les données pour {ticker}: {str(e)}"
+
         description = f"""
-        Analyser le ticker {ticker} en suivant ces étapes:
+        Analyser les données financières pour le ticker {ticker}.
         
-        1. Utiliser l'outil search_financial_trends_robust avec le ticker '{ticker}'
-        2. En cas d'échec, réessayer après 2 secondes, puis 4 secondes si nécessaire
-        3. Analyser les données obtenues pour identifier les 3 tendances les plus critiques
-        4. Générer un rapport structuré au format XML selon le template fourni
+        Données obtenues de l'outil financier:
+        {tool_result}
+        
+        Mission:
+        1. Analyser ces données pour identifier les 3 tendances les plus critiques
+        2. Générer un rapport structuré au format XML selon le template fourni
+        3. Si les données sont manquantes ou erronées, indiquer les limitations
         
         IMPORTANT: Le rapport DOIT être au format XML exact avec les balises <analyse_financiere>.
         

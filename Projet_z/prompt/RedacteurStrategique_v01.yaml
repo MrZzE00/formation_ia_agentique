@@ -66,21 +66,21 @@ goal_and_instructions:
     <OutputFormat>
       <Instruction>Ta réponse doit être exclusivement en Markdown et commencer directement par le titre H1. Ne rajoute aucune explication ou texte avant ou après le rapport.</Instruction>
       <Template>
-# Analyse Stratégique
+        # Analyse Stratégique
 
-[Introduction de deux phrases, basée sur le résumé exécutif de l'input et incluant une note de neutralité.]
+        [Introduction de deux phrases, basée sur le résumé exécutif de l'input et incluant une note de neutralité.]
 
-## [Titre de la Tendance Clé 1, reformulé de manière claire]
-- [Premier point de détail, expliquant la tendance.]
-- [Second point de détail, décrivant l'impact potentiel mentionné.]
+        ## [Titre de la Tendance Clé 1, reformulé de manière claire]
+        - [Premier point de détail, expliquant la tendance.]
+        - [Second point de détail, décrivant l'impact potentiel mentionné.]
 
-## [Titre de la Tendance Clé 2, reformulé de manière claire]
-- [Premier point de détail, expliquant la tendance.]
-- [Second point de détail, décrivant l'impact potentiel mentionné.]
+        ## [Titre de la Tendance Clé 2, reformulé de manière claire]
+        - [Premier point de détail, expliquant la tendance.]
+        - [Second point de détail, décrivant l'impact potentiel mentionné.]
 
-## [Titre de la Tendance Clé 3, reformulé de manière claire]
-- [Premier point de détail, expliquant la tendance.]
-- [Second point de détail, décrivant l'impact potentiel mentionné.]
+        ## [Titre de la Tendance Clé 3, reformulé de manière claire]
+        - [Premier point de détail, expliquant la tendance.]
+        - [Second point de détail, décrivant l'impact potentiel mentionné.]
       </Template>
     </OutputFormat>
 
@@ -102,12 +102,13 @@ memory:
 # --- Orchestration and Control Flow ---
 orchestration:
   strategy: "static_workflow"
-  <FallbackStrategy>
-    <Scenario trigger="Missing_Critical_Information">
-      <Attempt step="1" action="Vérifier si la balise <analyse_financiere> ou ses sous-éléments sont vides ou absents." />
-      <Finally action="Répondre : 'ERREUR : L'analyse financière fournie en entrée est incomplète ou mal formatée. Impossible de générer le rapport.'" />
-    </Scenario>
-  </FallbackStrategy>
+  fallback_strategy: |
+    <FallbackStrategy>
+      <Scenario trigger="Missing_Critical_Information">
+        <Attempt step="1" action="Vérifier si la balise <analyse_financiere> ou ses sous-éléments sont vides ou absents." />
+        <Finally action="Répondre : 'ERREUR : L'analyse financière fournie en entrée est incomplète ou mal formatée. Impossible de générer le rapport.'" />
+      </Scenario>
+    </FallbackStrategy>
 
 # --- Safety, Ethics, and Guardrails ---
 safety_and_guardrails:

@@ -65,27 +65,27 @@ goal_and_instructions:
     <OutputFormat>
       <Description>Le rapport doit être un bloc de texte structuré et concis.</Description>
       <Template>
-<analyse_financiere>
-  <resume_executif>[Résumé de l'analyse en une phrase concise.]</resume_executif>
-  <tendances>
-    <tendance numero="1">
-      <titre>[Titre descriptif de la tendance 1]</titre>
-      <importance>[Critique/Élevée/Modérée]</importance>
-      <impact>[Description de l'impact potentiel de cette tendance.]</impact>
-    </tendance>
-    <tendance numero="2">
-      <titre>[Titre descriptif de la tendance 2]</titre>
-      <importance>[Critique/Élevée/Modérée]</importance>
-      <impact>[Description de l'impact potentiel de cette tendance.]</impact>
-    </tendance>
-    <tendance numero="3">
-      <titre>[Titre descriptif de la tendance 3]</titre>
-      <importance>[Critique/Élevée/Modérée]</importance>
-      <impact>[Description de l'impact potentiel de cette tendance.]</impact>
-    </tendance>
-  </tendances>
-  <limitation_donnees>[Mention explicite si les données n'ont pas pu être obtenues. Laisser vide sinon.]</limitation_donnees>
-</analyse_financiere>
+        <analyse_financiere>
+          <resume_executif>[Résumé de l'analyse en une phrase concise.]</resume_executif>
+          <tendances>
+            <tendance numero="1">
+              <titre>[Titre descriptif de la tendance 1]</titre>
+              <importance>[Critique/Élevée/Modérée]</importance>
+              <impact>[Description de l'impact potentiel de cette tendance.]</impact>
+            </tendance>
+            <tendance numero="2">
+              <titre>[Titre descriptif de la tendance 2]</titre>
+              <importance>[Critique/Élevée/Modérée]</importance>
+              <impact>[Description de l'impact potentiel de cette tendance.]</impact>
+            </tendance>
+            <tendance numero="3">
+              <titre>[Titre descriptif de la tendance 3]</titre>
+              <importance>[Critique/Élevée/Modérée]</importance>
+              <impact>[Description de l'impact potentiel de cette tendance.]</impact>
+            </tendance>
+          </tendances>
+          <limitation_donnees>[Mention explicite si les données n'ont pas pu être obtenues. Laisser vide sinon.]</limitation_donnees>
+        </analyse_financiere>
       </Template>
     </OutputFormat>
 
@@ -114,13 +114,14 @@ memory:
 orchestration:
   strategy: "dynamic_context_assembly_with_prioritization"
   max_iterations: 3 # Permet 1 appel initial + 2 tentatives
-  <FallbackStrategy>
-    <Scenario trigger="Tool_API_error" tool_name="search_financial_trends_robust">
-      <Attempt step="1" action="Retry tool call after 2 seconds" />
-      <Attempt step="2" action="Retry tool call after 4 seconds" />
-      <Finally action="Report failure: 'La récupération des données pour le ticker [ticker_symbol] a échoué après plusieurs tentatives.' and proceed to generate the report with the limitation noted." />
-    </Scenario>
-  </FallbackStrategy>
+  fallback_strategy: |
+    <FallbackStrategy>
+      <Scenario trigger="Tool_API_error" tool_name="search_financial_trends_robust">
+        <Attempt step="1" action="Retry tool call after 2 seconds" />
+        <Attempt step="2" action="Retry tool call after 4 seconds" />
+        <Finally action="Report failure: 'La récupération des données pour le ticker [ticker_symbol] a échoué après plusieurs tentatives.' and proceed to generate the report with the limitation noted." />
+      </Scenario>
+    </FallbackStrategy>
 
 # --- Safety, Ethics, and Guardrails ---
 safety_and_guardrails:

@@ -53,7 +53,7 @@ Pour éviter les conflits de dépendances, il est fortement recommandé d'utilis
 cd /Users/norbertjeff/Documents/_CODE/22_FORMATION_IA_AGENTIQUE/Projet_z
 
 # Créer un environnement virtuel
-python -m venv venv
+python3 -m venv venv
 
 # Activer l'environnement virtuel
 # Sur macOS/Linux :
@@ -88,6 +88,27 @@ cp .env.example .env
 
 Obtenez votre clé API Google Gemini sur : https://makersuite.google.com/app/apikey
 
+**⚠️ Important** : Une clé API Google Gemini valide est **obligatoire** pour utiliser les agents LLM. Sans clé API :
+- ✅ L'outil `search_financial_trends_robust` fonctionne (utilise Yahoo Finance)
+- ❌ Les agents CrewAI ne peuvent pas traiter les données (erreur LLM Provider)
+
+### Résolution des Problèmes Courants
+
+#### Erreur "LLM Provider NOT provided"
+```
+Error: LLM Provider NOT provided. Pass in the LLM provider you are trying to call.
+You passed model=models/gemini-1.5-flash
+```
+
+**Solution** : Vérifiez votre clé API Google :
+```bash
+# Vérifier la variable d'environnement
+echo $GOOGLE_API_KEY
+
+# Si vide, configurer dans .env
+echo "GOOGLE_API_KEY=your_real_api_key_here" >> .env
+```
+
 ## 📖 Utilisation
 
 ### Mode Interactif (Recommandé)
@@ -96,7 +117,7 @@ Obtenez votre clé API Google Gemini sur : https://makersuite.google.com/app/api
 # Assurez-vous que l'environnement virtuel est activé
 source venv/bin/activate  # Sur macOS/Linux
 
-python main.py
+python3 main.py
 ```
 
 Interface complète avec menu :
@@ -110,16 +131,69 @@ Interface complète avec menu :
 
 ```bash
 # Analyser un ticker directement
-python main.py --ticker AAPL
+python3 main.py --ticker AAPL
 
 # Afficher les métriques
-python main.py --metrics
+python3 main.py --metrics
 
 # Lancer les tests
-python main.py --test
+python3 main.py --test
 
 # Résumé complet du système
-python main.py --summary
+python3 main.py --summary
+```
+
+### 📈 Tickers Populaires Testés
+
+L'application supporte tous les tickers disponibles sur Yahoo Finance. Voici une liste de tickers populaires pour vos tests :
+
+#### 🇺🇸 Actions Américaines - Tech (FAANG+)
+- **AAPL** - Apple Inc.
+- **MSFT** - Microsoft Corporation
+- **GOOGL** - Alphabet Inc. (Google)
+- **AMZN** - Amazon.com Inc.
+- **META** - Meta Platforms (Facebook)
+- **NFLX** - Netflix Inc.
+- **NVDA** - NVIDIA Corporation
+- **TSLA** - Tesla Inc.
+
+#### 🏦 Secteur Financier
+- **JPM** - JPMorgan Chase & Co.
+- **BAC** - Bank of America Corp.
+- **GS** - Goldman Sachs Group Inc.
+- **V** - Visa Inc.
+- **MA** - Mastercard Inc.
+
+#### 🏭 Secteur Industriel & Énergie
+- **JNJ** - Johnson & Johnson
+- **PG** - Procter & Gamble Co.
+- **XOM** - Exxon Mobil Corporation
+- **CVX** - Chevron Corporation
+- **BA** - Boeing Company
+
+#### 🇪🇺 Actions Européennes
+- **ASML** - ASML Holding NV
+- **SAP** - SAP SE
+- **NESN.SW** - Nestlé SA (Suisse)
+- **MC.PA** - LVMH (France)
+
+#### 🇯🇵 Actions Japonaises
+- **7203.T** - Toyota Motor Corp
+- **6758.T** - Sony Group Corp
+
+#### 💰 ETFs Populaires
+- **SPY** - SPDR S&P 500 ETF
+- **QQQ** - Invesco QQQ Trust
+- **VTI** - Vanguard Total Stock Market ETF
+- **VOO** - Vanguard S&P 500 ETF
+
+#### 🏃‍♂️ Test Rapide
+```bash
+# Tests rapides avec différents secteurs
+python main.py --ticker AAPL    # Tech
+python main.py --ticker JPM     # Finance  
+python main.py --ticker TSLA    # Auto/Énergie
+python main.py --ticker SPY     # ETF S&P 500
 ```
 
 ### Exemples d'Analyse

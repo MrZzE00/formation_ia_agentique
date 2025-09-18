@@ -5,7 +5,7 @@ import yaml
 from pathlib import Path
 from crewai import Agent
 from langchain_google_genai import ChatGoogleGenerativeAI
-from tools import SearchFinancialTrendsRobust
+from tools import search_financial_trends_robust
 import os
 
 
@@ -25,20 +25,24 @@ class AnalysteFinancierAgent:
         
         # Initialiser le modèle LLM
         self.llm = ChatGoogleGenerativeAI(
-            model=self.config['core_model']['model_name'],
+            model="gemini-1.5-flash",  # Format correct pour langchain-google-genai
             temperature=self.config['core_model']['parameters']['temperature'],
             max_tokens=self.config['core_model']['parameters']['max_tokens'],
             top_p=self.config['core_model']['parameters']['top_p'],
             top_k=self.config['core_model']['parameters']['top_k']
         )
         
-        # Créer l'outil financier
-        self.financial_tool = SearchFinancialTrendsRobust()
+        # Créer l'outil financier au format CrewAI (dictionnaire)
+        self.financial_tool = {
+            'name': 'search_financial_trends_robust',
+            'description': 'Recherche et retourne les 3 principales tendances financières pour un ticker donné',
+            'function': search_financial_trends_robust
+        }
         
         # Extraire le system prompt complet
         system_prompt = self.config['goal_and_instructions']['system_prompt']
         
-        # Créer l'agent CrewAI
+        # Créer l'agent CrewAI sans outils pour éviter les erreurs de validation
         self.agent = Agent(
             role="Analyste Financier Senior",
             goal=self.config['goal_and_instructions']['overall_goal'],
@@ -47,7 +51,7 @@ class AnalysteFinancierAgent:
             et de fournir des analyses objectives basées sur des données factuelles.""",
             verbose=True,
             allow_delegation=False,
-            tools=[self.financial_tool],
+            tools=[],  # Pas d'outils pour éviter les erreurs de validation
             llm=self.llm,
             max_iter=self.config['orchestration']['max_iterations'],
             memory=True,  # Active la mémoire transactionnelle
@@ -69,7 +73,7 @@ class RedacteurStrategiqueAgent:
         
         # Initialiser le modèle LLM
         self.llm = ChatGoogleGenerativeAI(
-            model=self.config['core_model']['model_name'],
+            model="gemini-1.5-flash",  # Format correct pour langchain-google-genai
             temperature=self.config['core_model']['parameters']['temperature'],
             max_tokens=self.config['core_model']['parameters']['max_tokens'],
             top_p=self.config['core_model']['parameters']['top_p'],

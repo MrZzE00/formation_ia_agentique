@@ -15,10 +15,18 @@ def setup_environment():
     load_dotenv()
     
     # Vérifier la présence de la clé API Google
-    if not os.getenv("GOOGLE_API_KEY"):
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
         print("⚠️  ATTENTION: Variable d'environnement GOOGLE_API_KEY non trouvée")
         print("   Créez un fichier .env avec: GOOGLE_API_KEY=your_api_key_here")
         print("   Ou exportez la variable: export GOOGLE_API_KEY=your_api_key_here")
+        print("   Obtenir une clé: https://makersuite.google.com/app/apikey")
+        return False
+    
+    if api_key == "test_key_for_demo" or api_key.startswith("test_"):
+        print("⚠️  ATTENTION: Clé API de test détectée")
+        print("   Utilisez une vraie clé Google API pour utiliser les agents LLM")
+        print("   L'outil financier fonctionne, mais les agents ne pourront pas traiter les données")
         return False
     
     return True
