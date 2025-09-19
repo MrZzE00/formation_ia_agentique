@@ -3,33 +3,28 @@ import os
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-# Charge les variables d'environnement (votre clé API)
 load_dotenv()
-# Assurez-vous d'avoir un fichier .env avec GOOGLE_API_KEY="votre_clé_ici"
+os.environ["GEMINI_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
-print("--- Configuration des Modèles LLM avec Google Gemini ---")
+print("--- Configuration des Modèles LLM avec Google Gemini (Version Corrigée) ---")
+
+# --- APPROCHE RECOMMANDÉE : CONTRÔLE PAR LA TEMPÉRATURE ---
 
 # Configuration pour l'Analyste de Données (précis et factuel)
 analyst_llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash",  # Modèle Google Gemini 1.5 Flash
-    temperature=0.1,           # Très factuel, peu de créativité
-    max_tokens=2048,           # Limite de tokens appropriée
-    top_p=0.8,                 # Nucleus sampling pour plus de précision
-    top_k=40                   # Top-k sampling
+    model="gemini-1.5-flash",
+    temperature=0.2,           # ON NE GARDE QUE CE PARAMÈTRE POUR LE CONTRÔLE
+    # top_p et top_k sont laissés à leurs valeurs par défaut (désactivés)
 )
 
 # Configuration pour le Rédacteur Stratégique (fluide et naturel)
 writer_llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash",  # Modèle Google Gemini 1.5 Flash
-    temperature=0.3,           # Légèrement plus créatif pour un style engageant
-    max_tokens=2048,           # Limite de tokens appropriée
-    top_p=0.9,                 # Plus de diversité pour la rédaction
-    top_k=40                   # Top-k sampling
+    model="gemini-1.5-flash",
+    temperature=0.7,           # ON NE GARDE QUE CE PARAMÈTRE POUR LE CONTRÔLE
 )
 
-print("✅ Modèle Gemini pour l'Analyste configuré.")
-print("✅ Modèle Gemini pour le Rédacteur configuré.")
+print("✅ Modèle Gemini pour l'Analyste configuré (via temperature).")
+print("✅ Modèle Gemini pour le Rédacteur configuré (via temperature).")
 
-# Configuration des API keys pour LiteLLM (utilisé par certains frameworks)
-if os.getenv("GOOGLE_API_KEY") and not os.getenv("GEMINI_API_KEY"):
-    os.environ["GEMINI_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+# Pour l'instant, ce fichier ne fait rien de plus que définir les modèles.
+# Nous les importerons dans le fichier suivant.
