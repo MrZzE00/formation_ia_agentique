@@ -51,49 +51,109 @@ Projet_Formation/
 
 ## 🔧 Prérequis
 
-### Dépendances Python
+- Python 3.8 ou supérieur
+- pip (gestionnaire de paquets Python)
+- Un compte Google pour obtenir une clé API Gemini
+- Git pour cloner le projet
+
+## 🚀 Installation Détaillée
+
+### Étape 1 : Cloner le Projet
 
 ```bash
+# Cloner le dépôt
+git clone [votre-repo]
+
+# Se déplacer dans le répertoire du projet
+cd Projet_Formation
+```
+
+### Étape 2 : Créer un Environnement Virtuel (Recommandé)
+
+```bash
+# Créer un environnement virtuel
+python3 -m venv venv
+
+# Activer l'environnement virtuel
+# Sur macOS/Linux :
+source venv/bin/activate
+
+# Sur Windows :
+# venv\Scripts\activate
+```
+
+### Étape 3 : Installer les Dépendances
+
+```bash
+# Méthode 1 : Installation via requirements.txt (RECOMMANDÉ)
+pip install -r requirements.txt
+
+# Méthode 2 : Installation manuelle
 pip install crewai
 pip install langchain
 pip install langchain-google-genai
 pip install python-dotenv
+pip install pytest  # Optionnel, pour les tests
 ```
 
-### Configuration
+### Étape 4 : Configuration des Clés API
 
-1. Créer un fichier `.env` à la racine du projet :
+1. **Créer le fichier de configuration** :
+```bash
+# Copier le fichier exemple
+cp .env.example .env
+
+# Ou créer directement le fichier .env
+touch .env
+```
+
+2. **Obtenir une clé API Google Gemini** :
+   - Aller sur [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Cliquer sur "Get API Key"
+   - Créer une nouvelle clé API
+   - Copier la clé générée
+
+3. **Éditer le fichier `.env`** :
+```bash
+# Ouvrir le fichier avec votre éditeur préféré
+nano .env  # ou vim, code, etc.
+```
+
+Ajouter vos clés :
 ```env
-GOOGLE_API_KEY=your_google_api_key_here
-SERPER_API_KEY=your_serper_api_key_here
+GOOGLE_API_KEY=votre_cle_google_api_ici
+SERPER_API_KEY=votre_cle_serper_ici  # Optionnel
 CHROMA_OPENAI_API_KEY=not_needed_with_gemini
 ```
 
-2. Obtenir une clé API Google Gemini :
-   - Aller sur [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Créer une nouvelle clé API
-   - Copier la clé dans votre fichier `.env`
-
-3. S'assurer que Python 3.8+ est installé
-
-## 🚀 Installation
+### Étape 5 : Vérifier l'Installation
 
 ```bash
-# Cloner le projet
-git clone [votre-repo]
-cd Projet_Formation
+# Vérifier que toutes les dépendances sont installées
+pip list | grep -E "crewai|langchain|dotenv"
 
-# Installer les dépendances
-pip install crewai langchain langchain-google-genai python-dotenv
+# Tester la configuration
+python3 -c "from dotenv import load_dotenv; load_dotenv(); import os; print('✅ .env chargé' if os.getenv('GOOGLE_API_KEY') else '❌ Clé API manquante')"
 
-# Configurer les clés API
-cp .env.example .env
-# Éditer .env avec vos vraies clés API
+# Tester l'import des modules
+python3 -c "import crewai, langchain; print('✅ Modules importés avec succès')"
 ```
 
 ## 💻 Utilisation
 
-### Exécution Principale
+### Lancement de l'Application
+
+#### Étape 1 : S'assurer que l'environnement est activé
+
+```bash
+# Sur macOS/Linux :
+source venv/bin/activate
+
+# Sur Windows :
+# venv\Scripts\activate
+```
+
+#### Étape 2 : Lancer l'analyse
 
 ```bash
 # Analyser NVIDIA (par défaut)
@@ -105,6 +165,8 @@ python3 main.py MSFT
 python3 main.py TSLA
 python3 main.py GOOGL
 ```
+
+**Note** : L'application générera un rapport d'analyse financière dans la console. Le processus peut prendre 30-60 secondes selon le ticker analysé.
 
 ### Tests Individuels
 
