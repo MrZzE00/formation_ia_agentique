@@ -4,7 +4,7 @@ from tools_creation import search_financial_trends_robust
 from prompt_constitution import analyst_system_prompt_template, writer_system_prompt_template
 from model_configuration import analyst_crewai_llm, writer_crewai_llm
 
-print("--- Définition des Agents CrewAI avec Gemini 1.5 Flash ---")
+print("--- Définition des Agents ---")
 
 # Agent 1 : L'Analyste de Données (avec son outil et system prompt)
 data_analyst = Agent(
@@ -39,5 +39,5 @@ strategy_writer = Agent(
     memory=False  # Mémoire désactivée pour simplifier la formation
 )
 
-print("✅ Agent 'Analyste de Données' défini avec Gemini 1.5 Flash.")
-print("✅ Agent 'Rédacteur Stratégique' défini avec Gemini 1.5 Flash.")
+print("✅ Agent 'Analyste de Données'")
+print("✅ Agent 'Rédacteur Stratégique'")
