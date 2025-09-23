@@ -18,7 +18,7 @@ data_analyst = Agent(
     llm=analyst_crewai_llm,
     system_template=analyst_system_prompt_template, # Ajout du system prompt structuré
     verbose=True,                                   # Affiche la chaîne de pensée de l'agent (ReAct)
-    allow_delegation=False,
+    allow_delegation=False,                         # L'agent ne peut pas déléguer des tâches à d'autres agents
     max_iter=3,                                     # Limite les itérations pour éviter les boucles
     memory=False                                    # Mémoire désactivée pour simplifier la formation
 )
@@ -34,7 +34,7 @@ strategy_writer = Agent(
     llm=writer_crewai_llm,
     system_template=writer_system_prompt_template,  # Ajout du system prompt structuré
     verbose=True,
-    allow_delegation=False,
+    allow_delegation=False,                         # L'agent ne peut pas déléguer des tâches à d'autres agents
     max_iter=2,                                     # Moins d'itérations pour la rédaction
     memory=False                                    # Mémoire désactivée pour simplifier la formation
 )
