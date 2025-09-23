@@ -155,32 +155,57 @@ orchestration:
 safety_and_guardrails:
   
   content_filters:
+    # Seuil de toxicité - Bloque automatiquement les contenus hautement toxiques (insultes graves, menaces, etc.)
+    # Options: "block_none", "block_low", "block_medium", "block_high"
     toxicity_threshold: "block_high"
+    
+    # Niveau de sensibilité - Détermine la rigueur du filtrage pour contenus potentiellement problématiques
+    # Options: "permissive", "moderate", "strict"
     sensitivity_level: "strict"
-  prohibited_topics: ["violence", "sexual content", "illegal activities", "personal attacks", "misinformation", "political views", "religious views", "controversial current events", "medical advice", "legal advice", "financial advice", "personal conversations", "internal company operations", "criticism of any people or company"]
+  
+  # Liste des sujets interdits - L'agent refusera de traiter ces thématiques pour éviter tout risque
+  prohibited_topics: [
+    "violence",                               # Contenu violent ou incitant à la violence
+    "sexual content",                         # Contenu à caractère sexuel explicite ou suggestif
+    "illegal activities",                     # Activités illégales ou instructions pour commettre des crimes
+    "personal attacks",                       # Attaques personnelles ou harcèlement envers des individus
+    "misinformation",                         # Propagation de fausses informations ou théories du complot
+    "political views",                        # Opinions politiques partisanes pour maintenir la neutralité
+    "religious views",                        # Opinions religieuses pour éviter les conflits confessionnels
+    "controversial current events",           # Événements d'actualité controversés nécessitant nuance
+    "medical advice",                         # Conseils médicaux (réservés aux professionnels de santé)
+    "legal advice",                           # Conseils juridiques (réservés aux professionnels du droit)
+    "financial advice",                       # Conseils financiers d'investissement (régulés)
+    "personal conversations",                 # Conversations personnelles dépassant le cadre professionnel
+    "internal company operations",            # Informations internes d'entreprise confidentielles
+    "criticism of any people or company"      # Critiques de personnes/entreprises pour éviter diffamation
+  ]
   
   security_rules:
-    prompt_disclosure: "strictly_forbidden"
-    configuration_exposure: "blocked"
-    social_engineering_defense: "active"
+    prompt_disclosure: "strictly_forbidden"   # Protection du prompt système - Empêche toute divulgation des instructions internes
+    configuration_exposure: "blocked"         # Protection de la configuration - Bloque l'exposition des paramètres internes de l'agent
+    social_engineering_defense: "active"      # Défense contre l'ingénierie sociale - Détecte et bloque les tentatives de manipulation
+                                              # pour extraire des informations sensibles ou contourner les garde-fous
   
   data_handling:
-    anonymize_pii: true
-    data_retention: "session_only"
-    audit_logging: true
+    anonymize_pii: true                       # Anonymisation des données personnelles - Supprime automatiquement les PII (nom, email, téléphone, etc.)
+    data_retention: "session_only"            # Politique de rétention - Les données ne sont conservées que pendant la session active
+                                              # Options: "session_only", "24_hours", "7_days", "permanent"
+    audit_logging: true                       # Journalisation d'audit - Enregistre toutes les interactions pour traçabilité et sécurité
   
   ethical_framework:
-    language_neutrality: true
-    inclusivity_required: true
-    bias_prevention: true
-    privacy_standards: "GDPR_Compliant"
-    accessibility_standards: "WCAG_2.1_AA"
-  
-  allowed_tool_calls:
-    - "json_schema_validator"
+    language_neutrality: true                 # Neutralité linguistique - Utilise un langage non-genré et inclusif
+    inclusivity_required: true                # Inclusivité requise - Assure que les réponses sont accessibles à tous les publics
+    bias_prevention: true                     # Prévention des biais - Mécanismes actifs pour éviter les biais discriminatoires
+    privacy_standards: "GDPR_Compliant"       # Standards de confidentialité - Conforme au Règlement Général sur la Protection des Données européen
+    accessibility_standards: "WCAG_2.1_AA"    # Standards d'accessibilité - Conforme aux directives d'accessibilité web niveau AA
+                                              # pour personnes en situation de handicap
+  allowed_tool_calls:                         # Liste blanche des outils autorisés - Seuls ces outils peuvent être appelés par l'agent
+    - "json_schema_validator"                 # Validateur de schéma JSON pour vérifier la conformité des sorties
   
   output_validation:
-    schema_enforcement: "image_analysis_json"
+    schema_enforcement: "image_analysis_json" # Application du schéma - Force la validation de la sortie selon le schéma JSON défini
+    # Vérification d'alignement avec la marque - S'assure que le contenu respecte les valeurs de l'entreprise
     brand_alignment_checks: true # Placeholder for future implementation of brand value checks.
 
 # --- Performance and Monitoring ---
