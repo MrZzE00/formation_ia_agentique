@@ -205,6 +205,7 @@ safety_and_guardrails:
   
   output_validation:
     schema_enforcement: "image_analysis_json" # Application du schéma - Force la validation de la sortie selon le schéma JSON défini
+    
     # Vérification d'alignement avec la marque - S'assure que le contenu respecte les valeurs de l'entreprise
     brand_alignment_checks: true # Placeholder for future implementation of brand value checks.
 
